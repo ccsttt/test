@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TSOI DAY TIMER</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Rubik&display=swap">
+    <style>
+        body {
+            background-color: black;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            font-family: 'Roboto', sans-serif;
+            position: relative;
+        }
+
+        #timer {
+            text-align: center;
+            font-size: 2em;
+            font-family: 'Press Start 2P', cursive;
+            background: linear-gradient(90deg, black, yellow, red, white);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+
+        #message {
+            position: absolute;
+            bottom: 50px;
+            font-family: 'Rubik', sans-serif;
+            font-size: 0.8em;
+            background: linear-gradient(90deg, black, yellow, red, white);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+
+        #final-message {
+            display: none;
+            font-family: 'Press Start 2P', cursive;
+            text-align: center;
+            font-size: 2em;
+            color: white;
+        }
+
+        .fade-out {
+            animation: fadeOut 1s forwards;
+        }
+
+        .fade-in {
+            animation: fadeIn 1s forwards;
+        }
+
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+            }
+            to {
+                opacity: 0;
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+
+            function updateTimer() {
+                const now = new Date().getTime();
+                const endDate = new Date(now + 30000).getTime(); // 30 seconds from now
+                const diff = endDate - now;
+
+                if (diff <= 0) {
+                    document.getElementById('timer').classList.add('fade-out');
+                    document.getElementById('message').classList.add('fade-out');
+                    setTimeout(() => {
+                        document.getElementById('timer').style.display = 'none';
+                        document.getElementById('message').style.display = 'none';
+                        const finalMessage = document.getElementById('final-message');
+                        finalMessage.style.display = 'block';
+                        finalMessage.classList.add('fade-in');
+
+                        const audio = new Audio('https://raw.githubusercontent.com/ccsttt/song/main/song.mp3');
+                        audio.play();
+                    }, 1000);
+                    return;
+                }
+
+                const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+                document.getElementById('timer').innerText = `${seconds}s`;
+
+                setTimeout(updateTimer, 1000);
+            }
+
+            updateTimer();
+        });
+    </script>
+</head>
+
+<body>
+    <div id="timer">30s</div>
+    <div id="message">06/21</div>
+    <div id="final-message">цой жив</div>
+</body>
+
+</html>
